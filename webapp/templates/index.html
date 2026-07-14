@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Duck or Cat?</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main>
+    <h1>Duck or Cat?</h1>
+    <p>Upload a photo and the model will guess which one it is.</p>
+
+    <form method="post" enctype="multipart/form-data">
+      <input type="file" name="photo" accept="image/*" required>
+      <button type="submit">Classify</button>
+    </form>
+
+    {% if error %}
+      <p class="error">{{ error }}</p>
+    {% endif %}
+
+    {% if result %}
+      <div class="result">
+        <h2>It's a {{ result.label }}!</h2>
+        <p>Confidence: {{ "%.1f"|format(result.confidence * 100) }}%</p>
+        <ul>
+          {% for label, prob in result.ranked %}
+            <li>{{ label }}: {{ "%.1f"|format(prob * 100) }}%</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  </main>
+</body>
+</html>

@@ -1,7 +1,7 @@
 body {
   font-family: system-ui, sans-serif;
-  background: #f7f5f2;
-  color: #222;
+  background: #14161a;
+  color: #e6e6e6;
   display: flex;
   justify-content: center;
   padding: 3rem 1rem;
@@ -10,14 +10,20 @@ body {
 main {
   max-width: 480px;
   width: 100%;
-  background: #fff;
+  background: #1e2128;
+  border: 1px solid #2c303a;
   border-radius: 12px;
   padding: 2rem;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
 }
 
 h1 {
   margin-top: 0;
+  color: #f5f5f5;
+}
+
+p {
+  color: #a8adb8;
 }
 
 form {
@@ -26,26 +32,50 @@ form {
   margin: 1.5rem 0;
 }
 
+input[type="file"] {
+  flex: 1;
+  color: #a8adb8;
+}
+
 button {
   cursor: pointer;
   border: none;
   border-radius: 6px;
-  background: #2f6f4f;
-  color: #fff;
+  background: #3fbf72;
+  color: #0d1310;
+  font-weight: 600;
   padding: 0.5rem 1rem;
 }
 
+button:hover {
+  background: #57cf85;
+}
+
 .error {
-  color: #b3261e;
+  color: #ff6b6b;
+}
+
+.preview {
+  display: block;
+  max-width: 100%;
+  max-height: 320px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  border: 1px solid #2c303a;
 }
 
 .result {
   margin-top: 1.5rem;
   padding-top: 1rem;
-  border-top: 1px solid #eee;
+  border-top: 1px solid #2c303a;
+}
+
+.result h2 {
+  color: #f5f5f5;
 }
 
 .result ul {
   padding-left: 1.2rem;
-  color: #555;
+  color: #a8adb8;
 }

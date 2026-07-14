@@ -21,6 +21,7 @@
 
     {% if result %}
       <div class="result">
+        <img class="preview" src="{{ result.image_data_uri }}" alt="Uploaded photo">
         <h2>It's a {{ result.label }}!</h2>
         <p>Confidence: {{ "%.1f"|format(result.confidence * 100) }}%</p>
         <ul>

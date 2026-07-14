@@ -1,3 +1,5 @@
+import base64
+import io
 import json
 import os
 
@@ -55,12 +57,16 @@ def index():
             error = "Please choose an image to upload."
         else:
             try:
-                image = Image.open(uploaded.stream)
+                image_bytes = uploaded.read()
+                image = Image.open(io.BytesIO(image_bytes))
                 ranked = predict(image)
+                mime = Image.MIME.get(image.format, "image/jpeg")
+                image_data_uri = f"data:{mime};base64,{base64.b64encode(image_bytes).decode()}"
                 result = {
                     "label": ranked[0][0],
                     "confidence": ranked[0][1],
                     "ranked": ranked,
+                    "image_data_uri": image_data_uri,
                 }
             except Exception:
                 error = "Could not read that file as an image."

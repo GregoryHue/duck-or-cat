@@ -1,0 +1,11 @@
+scraper/
+notebook/
+data/
+.git/
+.github/
+.vscode/
+**/__pycache__/
+**/*.pyc
+**/.venv/
+**/.ipynb_checkpoints/
+*.md

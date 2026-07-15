@@ -23,3 +23,6 @@ scraper/.scrapy/
 
 # Flask
 instance/
+
+
+scrapy.log

@@ -60,15 +60,10 @@ class PexelsSpider(scrapy.Spider):
             )
             fetched += 1
 
-        # Pexels' own `next_page` field is malformed (it duplicates the /v1/
-        # path segment, e.g. https://api.pexels.com/v1/v1/search?...), which
-        # 404s every time. Build the next page URL ourselves instead of
-        # trusting it, and use the page being full as the "more pages" signal.
-        has_more_pages = len(photos) == self.per_page
-        if has_more_pages and fetched < self.images_per_label:
-            next_url = f"{API_URL}?query={label}&per_page={self.per_page}&page={page + 1}"
+        next_page_url = data.get("next_page")
+        if next_page_url and fetched < self.images_per_label:
             yield scrapy.Request(
-                next_url,
+                next_page_url,
                 headers=response.request.headers,
                 callback=self.parse,
                 meta={"label": label, "page": page + 1, "fetched": fetched},

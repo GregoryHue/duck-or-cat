@@ -4,11 +4,10 @@ import json
 import os
 
 import torch
-import torch.nn as nn
 import torch.nn.functional as F
 from flask import Flask, render_template, request
 from PIL import Image
-from torchvision import transforms
+from torchvision import models, transforms
 
 MODELS_DIR = os.path.join(os.path.dirname(__file__), "..", "models")
 MODEL_PATH = os.path.join(MODELS_DIR, "model.pt")
@@ -22,50 +21,8 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 with open(CLASSES_PATH) as f:
     idx_to_class = {int(k): v for k, v in json.load(f).items()}
 
-
-class DuckOrCatCNN(nn.Module):
-    """Must stay identical to the architecture in notebook/train_model.ipynb —
-    this loads the state_dict that notebook trains and exports."""
-
-    def __init__(self, num_classes=2):
-        super().__init__()
-        self.features = nn.Sequential(
-            nn.Conv2d(3, 32, kernel_size=3, padding=1),
-            nn.BatchNorm2d(32),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(2),
-
-            nn.Conv2d(32, 64, kernel_size=3, padding=1),
-            nn.BatchNorm2d(64),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(2),
-
-            nn.Conv2d(64, 128, kernel_size=3, padding=1),
-            nn.BatchNorm2d(128),
-            nn.ReLU(inplace=True),
-            nn.MaxPool2d(2),
-
-            nn.Conv2d(128, 256, kernel_size=3, padding=1),
-            nn.BatchNorm2d(256),
-            nn.ReLU(inplace=True),
-            nn.AdaptiveAvgPool2d(1),
-        )
-        self.classifier = nn.Sequential(
-            nn.Flatten(),
-            nn.Dropout(0.5),
-            nn.Linear(256, 128),
-            nn.ReLU(inplace=True),
-            nn.Dropout(0.3),
-            nn.Linear(128, num_classes),
-        )
-
-    def forward(self, x):
-        x = self.features(x)
-        x = self.classifier(x)
-        return x
-
-
-model = DuckOrCatCNN(num_classes=len(idx_to_class))
+model = models.resnet18()
+model.fc = torch.nn.Linear(model.fc.in_features, len(idx_to_class))
 model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
 model.to(device)
 model.eval()
